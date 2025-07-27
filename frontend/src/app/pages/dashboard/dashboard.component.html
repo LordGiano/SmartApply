@@ -1,0 +1,75 @@
+<div class="dashboard-container">
+  <!-- Welcome Section -->
+  <div class="welcome-section">
+    <h1>Üdvözlünk a SmartApply-ban!</h1>
+    <p>Intelligens álláskeresési asszisztensed</p>
+  </div>
+
+  <!-- Quick Stats -->
+  <div class="stats-section">
+    <mat-card *ngFor="let stat of quickStats" class="stat-card">
+      <mat-card-content>
+        <div class="stat-content">
+          <div class="stat-info">
+            <h3>{{ stat.value }}</h3>
+            <p>{{ stat.label }}</p>
+          </div>
+          <mat-icon [class]="'stat-icon ' + stat.color">{{ stat.icon }}</mat-icon>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Main Functions -->
+  <div class="functions-section">
+    <h2>Főbb funkciók</h2>
+    <div class="function-grid">
+      <mat-card
+        *ngFor="let card of functionCards"
+        class="function-card"
+        [class.disabled]="card.disabled"
+        [routerLink]="!card.disabled ? card.route : null">
+
+        <mat-card-header>
+          <mat-icon [class]="'card-icon ' + card.color">{{ card.icon }}</mat-icon>
+          <mat-card-title>{{ card.title }}</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <p>{{ card.description }}</p>
+          <mat-chip *ngIf="card.disabled" class="coming-soon-chip">
+            Hamarosan
+          </mat-chip>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button
+            mat-raised-button
+            [color]="card.disabled ? '' : 'primary'"
+            [disabled]="card.disabled">
+            {{ card.disabled ? 'Fejlesztés alatt' : 'Megnyitás' }}
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Recent Activity -->
+  <div class="activity-section">
+    <mat-card>
+      <mat-card-header>
+        <mat-icon mat-card-avatar>history</mat-icon>
+        <mat-card-title>Legutóbbi tevékenységek</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="activity-item" *ngFor="let activity of recentActivities">
+          <mat-icon class="activity-icon">{{ activity.icon }}</mat-icon>
+          <div class="activity-content">
+            <p>{{ activity.description }}</p>
+            <small>{{ activity.timestamp }}</small>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
