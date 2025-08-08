@@ -1,121 +1,95 @@
-<mat-sidenav-container class="sidenav-container">
+<!-- Sidebar Container -->
+<mat-drawer-container class="sidenav-container" autosize>
   <!-- Sidebar -->
-  <mat-sidenav
-    #drawer
-    class="sidenav"
-    fixedInViewport
-    [mode]="(isHandset$ | async) ? 'over' : 'side'"
-    [opened]="!(isHandset$ | async) && !sidebarCollapsed"
-    [class.collapsed]="sidebarCollapsed">
-
+  <mat-drawer #drawer class="sidenav" [class.collapsed]="sidebarCollapsed" mode="side" opened>
     <!-- Sidebar Header -->
     <div class="sidebar-header">
-      <div class="app-logo" [class.collapsed]="sidebarCollapsed">
-        <mat-icon class="logo-icon">work</mat-icon>
-        <span class="app-title" *ngIf="!sidebarCollapsed">SmartApply</span>
+      <div class="logo-container" [class.collapsed]="sidebarCollapsed">
+        <div class="logo-icon">
+          <mat-icon>work_outline</mat-icon>
+        </div>
+        <span class="logo-text">SmartApply</span>
       </div>
     </div>
 
     <!-- Navigation Menu -->
-    <mat-nav-list class="navigation-list">
-      <ng-container *ngFor="let item of menuItems">
-
-        <!-- Menu items with children (expandable) -->
-        <div *ngIf="item.children && item.children.length > 0" class="menu-section">
-          <mat-list-item
-            class="nav-item parent-item"
-            [class.active]="hasActiveChild(item)"
-            [class.expanded]="item.expanded"
-            (click)="toggleExpansion(item)">
-
-            <mat-icon matListItemIcon
-              [matTooltip]="sidebarCollapsed ? item.label : ''"
-              matTooltipPosition="right">
-              {{ item.icon }}
-            </mat-icon>
-
-            <span matListItemTitle *ngIf="!sidebarCollapsed">{{ item.label }}</span>
-
-            <mat-icon
-              matListItemMeta
-              *ngIf="!sidebarCollapsed"
-              class="expand-icon">
+    <nav class="navigation-list">
+      <div class="menu-section" *ngFor="let item of menuItems">
+        <!-- Parent Item or Simple Item -->
+        <div class="nav-item" [class.has-submenu]="item.children" [class.expanded]="item.expanded">
+          <a
+            class="nav-link"
+            [class.parent-item]="item.children"
+            [class.active]="!item.children && isActive(item.route || '')"
+            [class.expanded]="item.expanded && item.children"
+            (click)="item.children ? toggleExpansion(item) : navigateTo(item.route || '')"
+            [attr.href]="item.children ? null : '#'"
+          >
+            <mat-icon class="nav-icon">{{ item.icon }}</mat-icon>
+            <span class="nav-text">{{ item.label }}</span>
+            <mat-icon class="expand-icon" *ngIf="item.children && !sidebarCollapsed">
               {{ item.expanded ? 'expand_less' : 'expand_more' }}
             </mat-icon>
-          </mat-list-item>
+          </a>
 
-          <!-- Expandable children -->
-          <div class="submenu" [class.expanded]="item.expanded && !sidebarCollapsed">
-            <mat-list-item
+          <!-- Submenu Items -->
+          <div class="submenu" [class.expanded]="item.expanded" *ngIf="item.children && !sidebarCollapsed">
+            <a
               *ngFor="let child of item.children"
-              class="nav-item child-item"
-              [class.active]="child.route && isActive(child.route)"
-              (click)="child.route && navigateTo(child.route)">
-
-              <mat-icon matListItemIcon class="child-icon">{{ child.icon }}</mat-icon>
-              <span matListItemTitle>{{ child.label }}</span>
-            </mat-list-item>
+              class="nav-link child-item"
+              [class.active]="isActive(child.route || '')"
+              (click)="navigateTo(child.route || '')"
+            >
+              <mat-icon class="child-icon">{{ child.icon }}</mat-icon>
+              <span class="nav-text">{{ child.label }}</span>
+            </a>
           </div>
         </div>
-
-        <!-- Simple menu items (no children) -->
-        <mat-list-item
-          *ngIf="!item.children || item.children.length === 0"
-          class="nav-item"
-          [class.active]="item.route && isActive(item.route)"
-          (click)="item.route && navigateTo(item.route)">
-
-          <mat-icon matListItemIcon
-            [matTooltip]="sidebarCollapsed ? item.label : ''"
-            matTooltipPosition="right">
-            {{ item.icon }}
-          </mat-icon>
-
-          <span matListItemTitle *ngIf="!sidebarCollapsed">{{ item.label }}</span>
-        </mat-list-item>
-
-      </ng-container>
-    </mat-nav-list>
+      </div>
+    </nav>
 
     <!-- Sidebar Footer -->
-    <div class="sidebar-footer" *ngIf="!sidebarCollapsed">
+    <div class="sidebar-footer">
       <div class="user-info">
         <mat-icon>account_circle</mat-icon>
-        <span>Felhasználó</span>
+        <span class="user-name" *ngIf="!sidebarCollapsed">Felhasználó</span>
       </div>
     </div>
-
-  </mat-sidenav>
+  </mat-drawer>
 
   <!-- Main Content Area -->
-  <mat-sidenav-content class="main-content">
-
+  <mat-drawer-content class="main-content">
     <!-- Top Toolbar -->
-    <mat-toolbar color="primary" class="top-toolbar">
-      <!-- Menu toggle button -->
-      <button
-        type="button"
-        mat-icon-button
-        (click)="toggleMenuButton()">
+    <mat-toolbar class="top-toolbar">
+      <button mat-icon-button (click)="toggleMenuButton()" class="menu-toggle">
         <mat-icon>menu</mat-icon>
       </button>
 
+      <!-- Search Bar -->
+      <div class="search-container" *ngIf="!(isHandset$ | async)">
+        <mat-icon class="search-icon">search</mat-icon>
+        <input type="text" placeholder="Keresés..." class="search-input">
+      </div>
+
       <span class="toolbar-spacer"></span>
 
-      <!-- Right side toolbar buttons -->
-      <button mat-icon-button>
-        <mat-icon>notifications</mat-icon>
+      <!-- Toolbar Actions -->
+      <button mat-icon-button class="toolbar-icon">
+        <mat-icon matBadge="3" matBadgeColor="warn" matBadgeSize="small">notifications</mat-icon>
       </button>
 
-      <button mat-icon-button>
-        <mat-icon>account_circle</mat-icon>
+      <button mat-icon-button class="toolbar-icon">
+        <mat-icon>mail</mat-icon>
+      </button>
+
+      <button mat-icon-button class="toolbar-icon">
+        <mat-icon>settings</mat-icon>
       </button>
     </mat-toolbar>
 
-    <!-- Router Content -->
+    <!-- Content Wrapper -->
     <div class="content-wrapper">
       <router-outlet></router-outlet>
     </div>
-
-  </mat-sidenav-content>
-</mat-sidenav-container>
+  </mat-drawer-content>
+</mat-drawer-container>

@@ -1,73 +1,169 @@
 <div class="dashboard-container">
-  <!-- Welcome Section -->
-  <div class="welcome-section">
-    <h1>Üdvözlünk a SmartApply-ban!</h1>
-    <p>Intelligens álláskeresési asszisztensed</p>
+  <!-- Header Section -->
+  <div class="dashboard-header">
+    <h1>Üdvözöljük a SmartApply-ban!</h1>
+    <p>Az Ön személyre szabott álláskeresési asszisztense</p>
   </div>
 
-  <!-- Quick Stats -->
-  <div class="stats-section">
-    <mat-card *ngFor="let stat of quickStats" class="stat-card">
-      <mat-card-content>
+  <!-- Stats Grid -->
+  <div class="stats-grid">
+    <mat-card class="stat-card" [ngClass]="stat.color" *ngFor="let stat of quickStats">
+      <div class="stat-header">
         <div class="stat-content">
-          <div class="stat-info">
-            <h3>{{ stat.value }}</h3>
-            <p>{{ stat.label }}</p>
-          </div>
-          <mat-icon [class]="'stat-icon ' + stat.color">{{ stat.icon }}</mat-icon>
+          <div class="stat-value">{{ stat.value }}</div>
+          <div class="stat-label">{{ stat.label }}</div>
         </div>
-      </mat-card-content>
+        <div class="stat-icon">
+          <mat-icon>{{ stat.icon }}</mat-icon>
+        </div>
+      </div>
+      <div class="stat-progress">
+        <mat-progress-bar mode="determinate" [value]="stat.progress || 50"></mat-progress-bar>
+      </div>
     </mat-card>
   </div>
 
-  <!-- Main Functions -->
-  <div class="functions-section">
-    <h2>Főbb funkciók</h2>
-    <div class="function-grid">
-      <mat-card
-        *ngFor="let card of functionCards"
-        class="function-card"
-        [class.disabled]="card.disabled"
-        [routerLink]="!card.disabled ? card.route : null">
+  <!-- Feature Cards Grid -->
+  <div class="feature-grid">
+    <!-- Önéletrajz Szerkesztő -->
+    <mat-card class="feature-card primary">
+      <div class="feature-icon">
+        <mat-icon>description</mat-icon>
+      </div>
+      <mat-card-content>
+        <h3 class="feature-title">Önéletrajz Szerkesztő</h3>
+        <p class="feature-description">HTML alapú önéletrajz készítése és szerkesztése témákkal, személyre szabással</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button color="primary" (click)="navigateToFeature('/documents/resume-editor')">
+          Megnyitás
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
 
-        <mat-card-header>
-          <mat-icon [class]="'card-icon ' + card.color">{{ card.icon }}</mat-icon>
-          <mat-card-title>{{ card.title }}</mat-card-title>
-        </mat-card-header>
+    <!-- Állásjelentkezések -->
+    <mat-card class="feature-card accent">
+      <div class="feature-icon">
+        <mat-icon>work</mat-icon>
+      </div>
+      <mat-card-content>
+        <h3 class="feature-title">Állásjelentkezések</h3>
+        <p class="feature-description">Jelentkezések kezelése, új pozíciók hozzáadása és nyomon követése</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button color="accent" (click)="navigateToFeature('/applications/list')">
+          Megnyitás
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
 
-        <mat-card-content>
-          <p>{{ card.description }}</p>
-          <mat-chip *ngIf="card.disabled" class="coming-soon-chip">
-            Hamarosan
-          </mat-chip>
-        </mat-card-content>
+    <!-- Státusz Kezelő -->
+    <mat-card class="feature-card warning">
+      <div class="feature-icon">
+        <mat-icon>timeline</mat-icon>
+      </div>
+      <mat-card-content>
+        <h3 class="feature-title">Státusz Kezelő</h3>
+        <p class="feature-description">Jelentkezések állapotának frissítése és folyamat nyomon követése</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button color="warn" (click)="navigateToFeature('/applications/status')">
+          Megnyitás
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
 
-        <mat-card-actions>
-          <button
-            mat-raised-button
-            [color]="card.disabled ? '' : 'primary'"
-            [disabled]="card.disabled">
-            {{ card.disabled ? 'Fejlesztés alatt' : 'Megnyitás' }}
-          </button>
-        </mat-card-actions>
-      </mat-card>
-    </div>
+    <!-- Adatbázis Kezelő -->
+    <mat-card class="feature-card success disabled">
+      <div class="feature-icon">
+        <mat-icon>storage</mat-icon>
+      </div>
+      <mat-card-content>
+        <h3 class="feature-title">Adatbázis Kezelő</h3>
+        <p class="feature-description">Cégek, pozíciók és kapcsolatok központi adatbázisa</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <mat-chip class="coming-soon">Hamarosan</mat-chip>
+      </mat-card-actions>
+    </mat-card>
+
+    <!-- Kimutatások -->
+    <mat-card class="feature-card primary disabled">
+      <div class="feature-icon">
+        <mat-icon>analytics</mat-icon>
+      </div>
+      <mat-card-content>
+        <h3 class="feature-title">Kimutatások</h3>
+        <p class="feature-description">Részletes jelentések és statisztikák az álláskeresési folyamatról</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <mat-chip class="coming-soon">Hamarosan</mat-chip>
+      </mat-card-actions>
+    </mat-card>
+
+    <!-- Jelentkező Bot -->
+    <mat-card class="feature-card accent disabled">
+      <div class="feature-icon">
+        <mat-icon>smart_toy</mat-icon>
+      </div>
+      <mat-card-content>
+        <h3 class="feature-title">Jelentkező Bot</h3>
+        <p class="feature-description">Automatikus állásjelentkezési bot beállítása és konfigurálása</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <mat-chip class="coming-soon">Hamarosan</mat-chip>
+      </mat-card-actions>
+    </mat-card>
   </div>
 
-  <!-- Recent Activity -->
-  <div class="activity-section">
-    <mat-card>
+  <!-- Recent Activities Section -->
+  <mat-card class="activity-section">
+    <mat-card-header>
+      <mat-card-title>Legutóbbi tevékenységek</mat-card-title>
+      <button mat-button color="primary" class="view-all-btn">
+        Összes megtekintése
+      </button>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="activity-list">
+        <div class="activity-item" *ngFor="let activity of recentActivities">
+          <div class="activity-icon" [ngClass]="getActivityIconClass(activity.icon)">
+            <mat-icon>{{ activity.icon }}</mat-icon>
+          </div>
+          <div class="activity-content">
+            <div class="activity-description">{{ activity.description }}</div>
+            <div class="activity-time">{{ activity.timestamp }}</div>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Charts Section -->
+  <div class="charts-grid">
+    <mat-card class="chart-card">
       <mat-card-header>
-        <mat-icon mat-card-avatar>history</mat-icon>
-        <mat-card-title>Legutóbbi tevékenységek</mat-card-title>
+        <mat-card-title>Jelentkezési statisztika</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <div class="activity-item" *ngFor="let activity of recentActivities">
-          <mat-icon class="activity-icon">{{ activity.icon }}</mat-icon>
-          <div class="activity-content">
-            <p>{{ activity.description }}</p>
-            <small>{{ activity.timestamp }}</small>
-          </div>
+        <div class="chart-placeholder">
+          <mat-icon>insert_chart</mat-icon>
+          <p>Grafikon hamarosan</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="chart-card">
+      <mat-card-header>
+        <mat-card-title>Heti aktivitás</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="chart-placeholder">
+          <mat-icon>show_chart</mat-icon>
+          <p>Grafikon hamarosan</p>
         </div>
       </mat-card-content>
     </mat-card>

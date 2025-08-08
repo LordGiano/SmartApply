@@ -1,15 +1,17 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Observable } from 'rxjs';
+import { map, shareReplay } from 'rxjs/operators';
+
 import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { MatBadgeModule } from '@angular/material/badge';
 
 interface MenuItem {
   label: string;
@@ -30,7 +32,8 @@ interface MenuItem {
     MatIconModule,
     MatButtonModule,
     MatToolbarModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatBadgeModule
   ],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
@@ -134,6 +137,13 @@ export class SidebarComponent implements OnInit {
         map(result => result.matches),
         shareReplay()
       );
+
+    // Auto-expand menu if child is active
+    this.menuItems.forEach(item => {
+      if (item.children && this.hasActiveChild(item)) {
+        item.expanded = true;
+      }
+    });
   }
 
   toggleSidebar() {
@@ -142,12 +152,27 @@ export class SidebarComponent implements OnInit {
 
   toggleExpansion(item: MenuItem) {
     if (item.children) {
+      // Prevent event bubbling
+      event?.preventDefault();
+      event?.stopPropagation();
+
+      // Close other expanded menus only if opening a new one
+      if (!item.expanded) {
+        this.menuItems.forEach(menuItem => {
+          if (menuItem !== item && menuItem.children) {
+            menuItem.expanded = false;
+          }
+        });
+      }
+
+      // Toggle current menu with smooth animation
       item.expanded = !item.expanded;
     }
   }
 
   navigateTo(route: string) {
     this.router.navigate([route]);
+
     // Close sidebar on mobile after navigation
     this.isHandset$.subscribe(isHandset => {
       if (isHandset && this.drawer) {
