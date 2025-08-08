@@ -13,14 +13,97 @@
 <body class="mat-typography">
   <app-root>
     <!-- Loading animation while app loads -->
-    <div style="display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column;">
-      <div style="width: 50px; height: 50px; border: 4px solid #f3f3f3; border-top: 4px solid #1976d2; border-radius: 50%; animation: spin 1s linear infinite;"></div>
-      <p style="margin-top: 20px; color: #666; font-family: Roboto, sans-serif;">SmartApply betöltése...</p>
+    <div style="display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+      <!-- Animated Logo with better contrast -->
+      <div style="position: relative; width: 80px; height: 80px; margin-bottom: 30px;">
+        <!-- White background circle for contrast -->
+        <div style="position: absolute; width: 100%; height: 100%; background: white; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);"></div>
+
+        <!-- Animated square border -->
+        <svg width="80" height="80" viewBox="0 0 80 80" style="position: absolute; animation: rotate 3s linear infinite;">
+          <rect x="8" y="8" width="64" height="64" rx="8"
+                fill="none"
+                stroke="#667eea"
+                stroke-width="3"
+                stroke-dasharray="256"
+                stroke-dashoffset="0"
+                style="animation: dash 2s ease-in-out infinite;"/>
+        </svg>
+
+        <!-- Animated checkmark -->
+        <svg width="80" height="80" viewBox="0 0 80 80" style="position: absolute;">
+          <path d="M25 40 L35 50 L55 30"
+                stroke="#764ba2"
+                stroke-width="3"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-dasharray="60"
+                stroke-dashoffset="60"
+                style="animation: draw 2s ease-in-out infinite;"/>
+        </svg>
+      </div>
+
+      <!-- Loading text with white color for contrast -->
+      <h2 style="color: white; font-size: 2rem; font-weight: 700; margin: 0 0 10px 0; text-shadow: 0 2px 10px rgba(0,0,0,0.2);">SmartApply</h2>
+      <p style="color: rgba(255, 255, 255, 0.9); font-family: Roboto, sans-serif; margin: 0 0 30px 0;">Betöltés folyamatban...</p>
+
+      <!-- Progress bar -->
+      <div style="width: 200px; height: 4px; background: rgba(255, 255, 255, 0.3); border-radius: 2px; overflow: hidden;">
+        <div style="height: 100%; background: white; border-radius: 2px; animation: progress 2s ease-in-out infinite;"></div>
+      </div>
     </div>
+
     <style>
-      @keyframes spin {
+      @keyframes rotate {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
+      }
+
+      @keyframes dash {
+        0% {
+          stroke-dashoffset: 256;
+          stroke: #667eea;
+        }
+        50% {
+          stroke-dashoffset: 0;
+          stroke: #764ba2;
+        }
+        100% {
+          stroke-dashoffset: -256;
+          stroke: #667eea;
+        }
+      }
+
+      @keyframes draw {
+        0%, 100% {
+          stroke-dashoffset: 60;
+          opacity: 0;
+        }
+        20% {
+          opacity: 1;
+        }
+        50% {
+          stroke-dashoffset: 0;
+          opacity: 1;
+        }
+        80% {
+          opacity: 1;
+        }
+      }
+
+      @keyframes progress {
+        0% {
+          width: 0%;
+          transform: translateX(0);
+        }
+        50% {
+          width: 70%;
+        }
+        100% {
+          width: 100%;
+          transform: translateX(200px);
+        }
       }
     </style>
   </app-root>
