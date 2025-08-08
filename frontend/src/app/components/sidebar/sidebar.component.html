@@ -23,7 +23,9 @@
             [class.active]="!item.children && isActive(item.route || '')"
             [class.expanded]="item.expanded && item.children"
             (click)="item.children ? toggleExpansion(item) : navigateTo(item.route || '')"
-            [attr.href]="item.children ? null : '#'"
+            [attr.href]="null"
+            role="button"
+            tabindex="0"
           >
             <mat-icon class="nav-icon">{{ item.icon }}</mat-icon>
             <span class="nav-text">{{ item.label }}</span>
@@ -39,6 +41,9 @@
               class="nav-link child-item"
               [class.active]="isActive(child.route || '')"
               (click)="navigateTo(child.route || '')"
+              [attr.href]="null"
+              role="button"
+              tabindex="0"
             >
               <mat-icon class="child-icon">{{ child.icon }}</mat-icon>
               <span class="nav-text">{{ child.label }}</span>

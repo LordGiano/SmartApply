@@ -1,0 +1,990 @@
+.profile-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+
+  .profile-header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 40px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+    .avatar-section {
+      .avatar-wrapper {
+        position: relative;
+
+        .avatar {
+          width: 120px;
+          height: 120px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 4px solid #fff;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .edit-avatar-btn {
+          position: absolute;
+          bottom: -5px;
+          right: -5px;
+          width: 40px;
+          height: 40px;
+
+          mat-icon {
+            font-size: 20px;
+          }
+        }
+      }
+    }
+
+    .header-info {
+      flex: 1;
+
+      .name {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 0 0 8px 0;
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .title {
+        font-size: 1.2rem;
+        color: #666;
+        margin: 0 0 12px 0;
+        font-weight: 500;
+      }
+
+      .location {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #888;
+
+        mat-icon {
+          font-size: 18px;
+        }
+      }
+    }
+
+    .header-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+
+      button {
+        min-width: 140px;
+        border-radius: 12px;
+        font-weight: 600;
+        text-transform: none;
+
+        mat-icon {
+          margin-right: 8px;
+        }
+      }
+    }
+  }
+
+  .profile-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    .profile-section {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+      }
+
+      mat-card-header {
+        background: linear-gradient(135deg, #f8f9ff, #e8f0ff);
+        padding: 24px 32px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        display: flex;
+        align-items: center;
+
+        mat-icon[mat-card-avatar] {
+          background: linear-gradient(45deg, #667eea, #764ba2);
+          color: white;
+          width: 48px;
+          height: 48px;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 24px;
+        }
+
+        mat-card-title {
+          font-size: 1.4rem;
+          font-weight: 600;
+          color: #333;
+          margin-left: 16px;
+        }
+
+        .section-actions {
+          margin-left: auto;
+        }
+      }
+
+      mat-card-content {
+        padding: 32px;
+      }
+    }
+  }
+
+  // Személyi adatok grid
+  .personal-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+
+    .info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 20px;
+      background: rgba(103, 126, 234, 0.05);
+      border-radius: 16px;
+      border: 1px solid rgba(103, 126, 234, 0.1);
+
+      mat-icon {
+        color: #667eea;
+        margin-top: 4px;
+      }
+
+      label {
+        font-weight: 600;
+        color: #555;
+        display: block;
+        margin-bottom: 6px;
+      }
+
+      .inline-inputs {
+        display: flex;
+        gap: 12px;
+
+        mat-form-field {
+          flex: 1;
+        }
+      }
+    }
+  }
+
+  // Munkatapasztalat
+  .work-item {
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    background: linear-gradient(135deg, #f8f9ff, #ffffff);
+    transition: all 0.3s ease;
+
+    &:hover {
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .work-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+
+      .work-main-info {
+        flex: 1;
+
+        h3 {
+          font-size: 1.3rem;
+          font-weight: 600;
+          color: #333;
+          margin: 0 0 8px 0;
+        }
+
+        .company-info {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 16px;
+          margin-bottom: 12px;
+
+          .company {
+            font-weight: 600;
+            color: #667eea;
+          }
+
+          .location {
+            color: #666;
+          }
+        }
+
+        .duration {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          color: #888;
+          font-size: 0.9rem;
+
+          .date-range {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+          }
+        }
+      }
+    }
+
+    .work-details {
+      .description {
+        margin-bottom: 16px;
+
+        h4 {
+          color: #555;
+          font-size: 1rem;
+          margin-bottom: 8px;
+        }
+
+        p {
+          line-height: 1.6;
+          color: #666;
+        }
+      }
+
+      .achievements {
+        margin-bottom: 16px;
+
+        h4 {
+          color: #555;
+          font-size: 1rem;
+          margin-bottom: 12px;
+        }
+
+        ul {
+          list-style-type: none;
+          padding: 0;
+
+          li {
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+            color: #666;
+            line-height: 1.5;
+
+            &:before {
+              content: '✓';
+              position: absolute;
+              left: 0;
+              color: #4caf50;
+              font-weight: bold;
+            }
+          }
+        }
+      }
+
+      .achievements-edit {
+        .achievement-item {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin-bottom: 8px;
+
+          .achievement-input {
+            flex: 1;
+          }
+        }
+      }
+
+      .technologies {
+        mat-chip-set {
+          mat-chip {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 20px;
+            font-weight: 500;
+          }
+        }
+
+        .tech-input {
+          margin-top: 12px;
+        }
+      }
+    }
+  }
+
+  // Tanulmányok
+  .education-item {
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #fff8f0, #ffffff);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .education-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+
+      .education-main-info {
+        flex: 1;
+
+        h3 {
+          font-size: 1.2rem;
+          font-weight: 600;
+          color: #333;
+          margin: 0 0 8px 0;
+        }
+
+        .institution {
+          color: #667eea;
+          font-weight: 500;
+          margin: 0 0 12px 0;
+        }
+
+        .duration,
+        .gpa {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          color: #888;
+          font-size: 0.9rem;
+          margin-bottom: 8px;
+        }
+
+        .year-range {
+          display: flex;
+          gap: 12px;
+        }
+
+        .inline-inputs {
+          display: flex;
+          gap: 12px;
+        }
+      }
+    }
+
+    .subjects {
+      h4 {
+        color: #555;
+        font-size: 1rem;
+        margin-bottom: 12px;
+      }
+
+      mat-chip-set {
+        mat-chip {
+          background: rgba(255, 193, 7, 0.1);
+          color: #ff6f00;
+          border: 1px solid rgba(255, 193, 7, 0.3);
+        }
+      }
+
+      .subject-input {
+        margin-top: 12px;
+      }
+    }
+  }
+
+  // Projektek
+  .project-item {
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #f0fff8, #ffffff);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .project-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+
+      .project-main-info {
+        flex: 1;
+
+        h3 {
+          font-size: 1.2rem;
+          font-weight: 600;
+          color: #333;
+          margin: 0 0 12px 0;
+        }
+
+        .project-links {
+          display: flex;
+          gap: 12px;
+          margin-bottom: 16px;
+
+          a {
+            border-radius: 8px;
+            font-size: 0.9rem;
+          }
+        }
+
+        .project-links-edit {
+          display: flex;
+          gap: 12px;
+          margin-bottom: 16px;
+        }
+      }
+    }
+
+    .project-details {
+      .description,
+      .goal {
+        margin-bottom: 16px;
+
+        h4 {
+          color: #555;
+          font-size: 1rem;
+          margin-bottom: 8px;
+        }
+
+        p {
+          line-height: 1.6;
+          color: #666;
+        }
+      }
+
+      .technologies {
+        h4 {
+          color: #555;
+          font-size: 1rem;
+          margin-bottom: 12px;
+        }
+
+        mat-chip-set {
+          mat-chip {
+            background: linear-gradient(45deg, #4caf50, #45a049);
+            color: white;
+          }
+        }
+
+        .tech-input {
+          margin-top: 12px;
+        }
+      }
+    }
+  }
+
+  // Nyelvismeret
+  .languages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+
+    .language-item {
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 12px;
+      padding: 20px;
+      background: linear-gradient(135deg, #fff5f5, #ffffff);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .language-info {
+        flex: 1;
+
+        h4 {
+          font-size: 1.1rem;
+          font-weight: 600;
+          margin: 0 0 12px 0;
+          color: #333;
+        }
+
+        .proficiency {
+          .level {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 8px;
+            display: block;
+          }
+
+          .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+
+            .progress {
+              height: 100%;
+              background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+              border-radius: 4px;
+              transition: width 0.3s ease;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Skillek
+  .skills-section {
+    .skill-category {
+      margin-bottom: 24px;
+
+      h4 {
+        color: #555;
+        font-size: 1.1rem;
+        margin-bottom: 16px;
+        font-weight: 600;
+      }
+
+      mat-chip-set {
+        margin-bottom: 12px;
+
+        mat-chip {
+          margin-right: 8px;
+          margin-bottom: 8px;
+
+          &:first-child mat-chip {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+          }
+
+          &:last-child mat-chip {
+            background: linear-gradient(45deg, #ffeaa7, #fab1a0);
+            color: #2d3436;
+          }
+        }
+      }
+
+      .skill-input {
+        width: 100%;
+        max-width: 300px;
+      }
+    }
+  }
+
+  // Tanúsítványok
+  .certification-item {
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #f8f0ff, #ffffff);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .cert-main-info {
+      flex: 1;
+
+      h4 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0 0 8px 0;
+        color: #333;
+      }
+
+      .issuer {
+        color: #667eea;
+        font-weight: 500;
+        margin: 0 0 12px 0;
+      }
+
+      .cert-details {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        align-items: center;
+        margin-bottom: 12px;
+        color: #666;
+        font-size: 0.9rem;
+      }
+
+      .credential-link {
+        margin-top: 8px;
+      }
+    }
+  }
+
+  // Munkapreferenciák
+  .preferences-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+
+    .preference-item {
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 12px;
+      padding: 20px;
+      background: linear-gradient(135deg, #f0f8ff, #ffffff);
+
+      h4 {
+        color: #555;
+        font-size: 1rem;
+        margin-bottom: 16px;
+        font-weight: 600;
+      }
+
+      mat-chip-set {
+        mat-chip {
+          background: rgba(103, 126, 234, 0.1);
+          color: #667eea;
+          border: 1px solid rgba(103, 126, 234, 0.2);
+        }
+      }
+
+      mat-checkbox {
+        display: block;
+        margin-bottom: 8px;
+      }
+
+      .salary-range {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+
+      p {
+        margin: 8px 0;
+        color: #666;
+      }
+    }
+  }
+
+  // Hobbik
+  .hobbies-display,
+  .hobbies-edit {
+    mat-chip-set {
+      mat-chip {
+        background: linear-gradient(45deg, #ff9a56, #ff6b6b);
+        color: white;
+        margin-right: 8px;
+        margin-bottom: 8px;
+      }
+    }
+
+    .hobby-input {
+      margin-top: 12px;
+      width: 100%;
+      max-width: 300px;
+    }
+  }
+
+  // Önkéntes munka
+  .volunteer-item {
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #f0fff0, #ffffff);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .volunteer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+
+      .volunteer-main-info {
+        flex: 1;
+
+        h4 {
+          font-size: 1.1rem;
+          font-weight: 600;
+          margin: 0 0 8px 0;
+          color: #333;
+        }
+
+        .organization {
+          color: #4caf50;
+          font-weight: 500;
+          margin: 0 0 12px 0;
+        }
+
+        .duration {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          color: #888;
+          font-size: 0.9rem;
+
+          .date-range {
+            display: flex;
+            gap: 12px;
+          }
+        }
+      }
+    }
+
+    .description {
+      p {
+        line-height: 1.6;
+        color: #666;
+      }
+    }
+  }
+
+  // Referenciák
+  .reference-item {
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #fff8f0, #ffffff);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .reference-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+
+      .reference-main-info {
+        flex: 1;
+
+        h4 {
+          font-size: 1.1rem;
+          font-weight: 600;
+          margin: 0 0 8px 0;
+          color: #333;
+        }
+
+        .position {
+          color: #667eea;
+          font-weight: 500;
+          margin: 0 0 12px 0;
+        }
+
+        .contact-info {
+          div {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+            color: #666;
+            font-size: 0.9rem;
+
+            mat-icon {
+              font-size: 16px;
+              color: #888;
+            }
+          }
+        }
+
+        .inline-inputs {
+          display: flex;
+          gap: 12px;
+          margin-bottom: 12px;
+        }
+      }
+    }
+
+    .relationship {
+      p {
+        color: #666;
+        font-size: 0.9rem;
+        margin: 0;
+      }
+    }
+  }
+
+  // Online jelenlét
+  .social-links {
+    .link-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 16px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 12px;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #f8f9ff, #ffffff);
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      mat-icon {
+        color: #667eea;
+        margin-top: 4px;
+      }
+
+      .link-content {
+        flex: 1;
+
+        label {
+          font-weight: 600;
+          color: #555;
+          display: block;
+          margin-bottom: 8px;
+        }
+
+        a {
+          color: #667eea;
+          text-decoration: none;
+          font-weight: 500;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+
+        .no-data {
+          color: #999;
+          font-style: italic;
+        }
+      }
+    }
+  }
+
+  // Közös form elemek
+  .full-width {
+    width: 100%;
+  }
+
+  .inline-inputs {
+    display: flex;
+    gap: 12px;
+
+    mat-form-field {
+      flex: 1;
+    }
+  }
+
+  .summary-text {
+    line-height: 1.6;
+    color: #666;
+    font-size: 1rem;
+    background: rgba(103, 126, 234, 0.05);
+    padding: 20px;
+    border-radius: 12px;
+    border-left: 4px solid #667eea;
+  }
+
+  // Reszponzív design
+  @media (max-width: 768px) {
+    padding: 16px;
+
+    .profile-header {
+      flex-direction: column;
+      text-align: center;
+      gap: 20px;
+      padding: 24px 20px;
+
+      .header-info {
+        .name {
+          font-size: 2rem;
+        }
+      }
+
+      .header-actions {
+        flex-direction: row;
+        justify-content: center;
+      }
+    }
+
+    .personal-info-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .languages-grid,
+    .preferences-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .work-header,
+    .education-header,
+    .project-header,
+    .volunteer-header,
+    .reference-header {
+      flex-direction: column;
+      gap: 16px;
+
+      .work-actions,
+      .education-actions,
+      .project-actions {
+        align-self: flex-end;
+      }
+    }
+
+    .inline-inputs {
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .project-links,
+    .project-links-edit {
+      flex-direction: column;
+      gap: 8px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 12px;
+
+    .profile-header {
+      padding: 20px 16px;
+
+      .avatar-section .avatar-wrapper .avatar {
+        width: 80px;
+        height: 80px;
+      }
+
+      .header-info .name {
+        font-size: 1.5rem;
+      }
+
+      .header-actions {
+        flex-direction: column;
+        width: 100%;
+
+        button {
+          width: 100%;
+        }
+      }
+    }
+
+    .profile-section {
+      mat-card-header {
+        padding: 16px 20px;
+
+        mat-card-title {
+          font-size: 1.2rem;
+        }
+      }
+
+      mat-card-content {
+        padding: 20px;
+      }
+    }
+  }
+}

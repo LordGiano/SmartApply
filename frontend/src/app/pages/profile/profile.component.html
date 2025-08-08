@@ -1,1 +1,874 @@
-<p>profile works!</p>
+<div class="profile-container">
+  <div class="profile-header">
+    <div class="avatar-section">
+      <div class="avatar-wrapper">
+        <img [src]="profileData.avatar || 'assets/default-avatar.png'" alt="Profilkép" class="avatar">
+        <button mat-fab color="accent" class="edit-avatar-btn" (click)="uploadAvatar()">
+          <mat-icon>camera_alt</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <div class="header-info">
+      <h1 class="name">{{profileData.personalInfo.firstName}} {{profileData.personalInfo.lastName}}</h1>
+      <p class="title">{{profileData.personalInfo.jobTitle}}</p>
+      <div class="location">
+        <mat-icon>place</mat-icon>
+        <span>{{profileData.personalInfo.city}}, {{profileData.personalInfo.country}}</span>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button mat-raised-button color="primary" (click)="editMode = !editMode">
+        <mat-icon>{{editMode ? 'save' : 'edit'}}</mat-icon>
+        {{editMode ? 'Mentés' : 'Szerkesztés'}}
+      </button>
+      <button mat-stroked-button (click)="exportProfile()">
+        <mat-icon>download</mat-icon>
+        Exportálás
+      </button>
+    </div>
+  </div>
+
+  <div class="profile-content">
+    <!-- Személyes bemutatkozás -->
+    <mat-card class="profile-section">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>person</mat-icon>
+        <mat-card-title>Személyes bemutatkozás</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngIf="!editMode" class="summary-text">
+          {{profileData.summary || 'Nincs bemutatkozás megadva'}}
+        </div>
+        <mat-form-field *ngIf="editMode" class="full-width">
+          <mat-label>Bemutatkozás</mat-label>
+          <textarea matInput [(ngModel)]="profileData.summary"
+                    placeholder="Rövid bemutatkozás..." rows="4"></textarea>
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Személyi adatok -->
+    <mat-card class="profile-section">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>contact_page</mat-icon>
+        <mat-card-title>Személyi adatok</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="personal-info-grid">
+          <div class="info-item">
+            <mat-icon>person</mat-icon>
+            <div>
+              <label>Teljes név</label>
+              <div *ngIf="!editMode">{{profileData.personalInfo.firstName}} {{profileData.personalInfo.lastName}}</div>
+              <div *ngIf="editMode" class="inline-inputs">
+                <mat-form-field>
+                  <mat-label>Keresztnév</mat-label>
+                  <input matInput [(ngModel)]="profileData.personalInfo.firstName">
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Vezetéknév</mat-label>
+                  <input matInput [(ngModel)]="profileData.personalInfo.lastName">
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <mat-icon>email</mat-icon>
+            <div>
+              <label>Email</label>
+              <div *ngIf="!editMode">{{profileData.personalInfo.email}}</div>
+              <mat-form-field *ngIf="editMode">
+                <input matInput [(ngModel)]="profileData.personalInfo.email" type="email">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <mat-icon>phone</mat-icon>
+            <div>
+              <label>Telefonszám</label>
+              <div *ngIf="!editMode">{{profileData.personalInfo.phone}}</div>
+              <mat-form-field *ngIf="editMode">
+                <input matInput [(ngModel)]="profileData.personalInfo.phone" type="tel">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <mat-icon>cake</mat-icon>
+            <div>
+              <label>Születési dátum</label>
+              <div *ngIf="!editMode">{{profileData.personalInfo.birthDate | date:'yyyy. MM. dd.'}}</div>
+              <mat-form-field *ngIf="editMode">
+                <input matInput [(ngModel)]="profileData.personalInfo.birthDate" type="date">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <mat-icon>place</mat-icon>
+            <div>
+              <label>Cím</label>
+              <div *ngIf="!editMode">
+                {{profileData.personalInfo.address}}<br>
+                {{profileData.personalInfo.city}}, {{profileData.personalInfo.postalCode}}<br>
+                {{profileData.personalInfo.country}}
+              </div>
+              <div *ngIf="editMode">
+                <mat-form-field class="full-width">
+                  <mat-label>Utca, házszám</mat-label>
+                  <input matInput [(ngModel)]="profileData.personalInfo.address">
+                </mat-form-field>
+                <div class="inline-inputs">
+                  <mat-form-field>
+                    <mat-label>Város</mat-label>
+                    <input matInput [(ngModel)]="profileData.personalInfo.city">
+                  </mat-form-field>
+                  <mat-form-field>
+                    <mat-label>Irányítószám</mat-label>
+                    <input matInput [(ngModel)]="profileData.personalInfo.postalCode">
+                  </mat-form-field>
+                </div>
+                <mat-form-field class="full-width">
+                  <mat-label>Ország</mat-label>
+                  <input matInput [(ngModel)]="profileData.personalInfo.country">
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Munkatapasztalat -->
+    <mat-card class="profile-section">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>work</mat-icon>
+        <mat-card-title>Munkatapasztalat</mat-card-title>
+        <div class="section-actions" *ngIf="editMode">
+          <button mat-icon-button (click)="addWorkExperience()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngFor="let work of profileData.workExperience; let i = index" class="work-item">
+          <div class="work-header">
+            <div class="work-main-info">
+              <h3 *ngIf="!editMode">{{work.position}}</h3>
+              <mat-form-field *ngIf="editMode">
+                <mat-label>Beosztás</mat-label>
+                <input matInput [(ngModel)]="work.position">
+              </mat-form-field>
+
+              <div class="company-info">
+                <span *ngIf="!editMode" class="company">{{work.company}}</span>
+                <mat-form-field *ngIf="editMode">
+                  <mat-label>Cég</mat-label>
+                  <input matInput [(ngModel)]="work.company">
+                </mat-form-field>
+
+                <span *ngIf="!editMode" class="location">{{work.location}}</span>
+                <mat-form-field *ngIf="editMode">
+                  <mat-label>Helyszín</mat-label>
+                  <input matInput [(ngModel)]="work.location">
+                </mat-form-field>
+              </div>
+
+              <div class="duration">
+                <mat-icon>schedule</mat-icon>
+                <span *ngIf="!editMode">{{work.startDate | date:'yyyy. MM.'}} - {{work.endDate ? (work.endDate | date:'yyyy. MM.') : 'jelenleg'}}</span>
+                <div *ngIf="editMode" class="date-range">
+                  <mat-form-field>
+                    <mat-label>Kezdés</mat-label>
+                    <input matInput [(ngModel)]="work.startDate" type="date">
+                  </mat-form-field>
+                  <mat-form-field>
+                    <mat-label>Befejezés</mat-label>
+                    <input matInput [(ngModel)]="work.endDate" type="date">
+                  </mat-form-field>
+                  <mat-checkbox [(ngModel)]="work.current">Jelenlegi munkahely</mat-checkbox>
+                </div>
+              </div>
+            </div>
+
+            <div class="work-actions" *ngIf="editMode">
+              <button mat-icon-button color="warn" (click)="removeWorkExperience(i)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <div class="work-details">
+            <div *ngIf="!editMode && work.description" class="description">
+              <h4>Feladatok:</h4>
+              <p>{{work.description}}</p>
+            </div>
+            <mat-form-field *ngIf="editMode" class="full-width">
+              <mat-label>Feladatok leírása</mat-label>
+              <textarea matInput [(ngModel)]="work.description" rows="3"></textarea>
+            </mat-form-field>
+
+            <div *ngIf="!editMode && work.achievements?.length" class="achievements">
+              <h4>Eredmények:</h4>
+              <ul>
+                <li *ngFor="let achievement of work.achievements">{{achievement}}</li>
+              </ul>
+            </div>
+
+            <div *ngIf="editMode" class="achievements-edit">
+              <h4>Eredmények:</h4>
+              <div *ngFor="let achievement of work.achievements; let j = index" class="achievement-item">
+                <mat-form-field class="achievement-input">
+                  <input matInput [(ngModel)]="work.achievements[j]">
+                </mat-form-field>
+                <button mat-icon-button (click)="removeAchievement(i, j)">
+                  <mat-icon>remove</mat-icon>
+                </button>
+              </div>
+              <button mat-stroked-button (click)="addAchievement(i)">
+                <mat-icon>add</mat-icon>
+                Eredmény hozzáadása
+              </button>
+            </div>
+
+            <div *ngIf="work.technologies?.length" class="technologies">
+              <mat-chip-set>
+                <mat-chip *ngFor="let tech of work.technologies" [removable]="editMode" (removed)="removeTechnology(i, tech)">
+                  {{tech}}
+                  <mat-icon matChipRemove *ngIf="editMode">cancel</mat-icon>
+                </mat-chip>
+              </mat-chip-set>
+              <mat-form-field *ngIf="editMode" class="tech-input">
+                <mat-label>Technológia hozzáadása</mat-label>
+                <input matInput #techInput (keyup.enter)="addTechnology(i, techInput.value); techInput.value=''">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Tanulmányok -->
+    <mat-card class="profile-section">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>school</mat-icon>
+        <mat-card-title>Tanulmányok</mat-card-title>
+        <div class="section-actions" *ngIf="editMode">
+          <button mat-icon-button (click)="addEducation()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngFor="let edu of profileData.education; let i = index" class="education-item">
+          <div class="education-header">
+            <div class="education-main-info">
+              <h3 *ngIf="!editMode">{{edu.degree}} - {{edu.field}}</h3>
+              <div *ngIf="editMode" class="inline-inputs">
+                <mat-form-field>
+                  <mat-label>Fokozat</mat-label>
+                  <input matInput [(ngModel)]="edu.degree">
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Szak</mat-label>
+                  <input matInput [(ngModel)]="edu.field">
+                </mat-form-field>
+              </div>
+
+              <p class="institution" *ngIf="!editMode">{{edu.institution}}</p>
+              <mat-form-field *ngIf="editMode">
+                <mat-label>Intézmény</mat-label>
+                <input matInput [(ngModel)]="edu.institution">
+              </mat-form-field>
+
+              <div class="duration">
+                <mat-icon>schedule</mat-icon>
+                <span *ngIf="!editMode">{{edu.startYear}} - {{edu.endYear || 'folyamatban'}}</span>
+                <div *ngIf="editMode" class="year-range">
+                  <mat-form-field>
+                    <mat-label>Kezdés éve</mat-label>
+                    <input matInput [(ngModel)]="edu.startYear" type="number">
+                  </mat-form-field>
+                  <mat-form-field>
+                    <mat-label>Befejezés éve</mat-label>
+                    <input matInput [(ngModel)]="edu.endYear" type="number">
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div *ngIf="edu.gpa && !editMode" class="gpa">
+                <mat-icon>grade</mat-icon>
+                <span>Átlag: {{edu.gpa}}</span>
+              </div>
+              <mat-form-field *ngIf="editMode">
+                <mat-label>Átlag</mat-label>
+                <input matInput [(ngModel)]="edu.gpa" type="number" step="0.01">
+              </mat-form-field>
+            </div>
+
+            <div class="education-actions" *ngIf="editMode">
+              <button mat-icon-button color="warn" (click)="removeEducation(i)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <div *ngIf="edu.subjects?.length" class="subjects">
+            <h4>Tanult témakörök:</h4>
+            <mat-chip-set>
+              <mat-chip *ngFor="let subject of edu.subjects" [removable]="editMode" (removed)="removeSubject(i, subject)">
+                {{subject}}
+                <mat-icon matChipRemove *ngIf="editMode">cancel</mat-icon>
+              </mat-chip>
+            </mat-chip-set>
+            <mat-form-field *ngIf="editMode" class="subject-input">
+              <mat-label>Témakör hozzáadása</mat-label>
+              <input matInput #subjectInput (keyup.enter)="addSubject(i, subjectInput.value); subjectInput.value=''">
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Projektek -->
+    <mat-card class="profile-section">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>folder_special</mat-icon>
+        <mat-card-title>Projektek</mat-card-title>
+        <div class="section-actions" *ngIf="editMode">
+          <button mat-icon-button (click)="addProject()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngFor="let project of profileData.projects; let i = index" class="project-item">
+          <div class="project-header">
+            <div class="project-main-info">
+              <h3 *ngIf="!editMode">{{project.name}}</h3>
+              <mat-form-field *ngIf="editMode">
+                <mat-label>Projekt neve</mat-label>
+                <input matInput [(ngModel)]="project.name">
+              </mat-form-field>
+
+              <div class="project-links" *ngIf="!editMode">
+                <a *ngIf="project.githubUrl" [href]="project.githubUrl" target="_blank" mat-stroked-button>
+                  <mat-icon>code</mat-icon>
+                  GitHub
+                </a>
+                <a *ngIf="project.liveUrl" [href]="project.liveUrl" target="_blank" mat-stroked-button>
+                  <mat-icon>launch</mat-icon>
+                  Élő verzió
+                </a>
+              </div>
+
+              <div *ngIf="editMode" class="project-links-edit">
+                <mat-form-field>
+                  <mat-label>GitHub URL</mat-label>
+                  <input matInput [(ngModel)]="project.githubUrl" type="url">
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Élő verzió URL</mat-label>
+                  <input matInput [(ngModel)]="project.liveUrl" type="url">
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="project-actions" *ngIf="editMode">
+              <button mat-icon-button color="warn" (click)="removeProject(i)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <div class="project-details">
+            <div *ngIf="!editMode && project.description" class="description">
+              <p>{{project.description}}</p>
+            </div>
+            <mat-form-field *ngIf="editMode" class="full-width">
+              <mat-label>Projekt leírása</mat-label>
+              <textarea matInput [(ngModel)]="project.description" rows="3"></textarea>
+            </mat-form-field>
+
+            <div *ngIf="!editMode && project.goal" class="goal">
+              <h4>Cél:</h4>
+              <p>{{project.goal}}</p>
+            </div>
+            <mat-form-field *ngIf="editMode" class="full-width">
+              <mat-label>Projekt célja</mat-label>
+              <textarea matInput [(ngModel)]="project.goal" rows="2"></textarea>
+            </mat-form-field>
+
+            <div *ngIf="project.technologies?.length" class="technologies">
+              <h4>Felhasznált technológiák:</h4>
+              <mat-chip-set>
+                <mat-chip *ngFor="let tech of project.technologies" [removable]="editMode" (removed)="removeProjectTechnology(i, tech)">
+                  {{tech}}
+                  <mat-icon matChipRemove *ngIf="editMode">cancel</mat-icon>
+                </mat-chip>
+              </mat-chip-set>
+              <mat-form-field *ngIf="editMode" class="tech-input">
+                <mat-label>Technológia hozzáadása</mat-label>
+                <input matInput #projectTechInput (keyup.enter)="addProjectTechnology(i, projectTechInput.value); projectTechInput.value=''">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Nyelvismeret -->
+    <mat-card class="profile-section">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>language</mat-icon>
+        <mat-card-title>Nyelvismeret</mat-card-title>
+        <div class="section-actions" *ngIf="editMode">
+          <button mat-icon-button (click)="addLanguage()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="languages-grid">
+          <div *ngFor="let lang of profileData.languages; let i = index" class="language-item">
+            <div class="language-info">
+              <h4 *ngIf="!editMode">{{lang.language}}</h4>
+              <mat-form-field *ngIf="editMode">
+                <mat-label>Nyelv</mat-label>
+                <input matInput [(ngModel)]="lang.language">
+              </mat-form-field>
+
+              <div class="proficiency" *ngIf="!editMode">
+                <span class="level">{{lang.level}}</span>
+                <div class="progress-bar">
+                  <div class="progress" [style.width.%]="getLanguageProficiency(lang.level)"></div>
+                </div>
+              </div>
+
+              <mat-form-field *ngIf="editMode">
+                <mat-label>Szint</mat-label>
+                <mat-select [(ngModel)]="lang.level">
+                  <mat-option value="Alapfok">Alapfok</mat-option>
+                  <mat-option value="Társalgási szint">Társalgási szint</mat-option>
+                  <mat-option value="Felsőfok">Felsőfok</mat-option>
+                  <mat-option value="Üzleti szint">Üzleti szint</mat-option>
+                  <mat-option value="Anyanyelvi szint">Anyanyelvi szint</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <button *ngIf="editMode" mat-icon-button color="warn" (click)="removeLanguage(i)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Skillek -->
+    <mat-card class="profile-section">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>psychology</mat-icon>
+        <mat-card-title>Készségek</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="skills-section">
+          <div class="skill-category">
+            <h4>Technikai készségek</h4>
+            <mat-chip-set>
+              <mat-chip *ngFor="let skill of profileData.skills.technical" [removable]="editMode" (removed)="removeTechnicalSkill(skill)">
+                {{skill}}
+                <mat-icon matChipRemove *ngIf="editMode">cancel</mat-icon>
+              </mat-chip>
+            </mat-chip-set>
+            <mat-form-field *ngIf="editMode" class="skill-input">
+              <mat-label>Technikai készség hozzáadása</mat-label>
+              <input matInput #techSkillInput (keyup.enter)="addTechnicalSkill(techSkillInput.value); techSkillInput.value=''">
+            </mat-form-field>
+          </div>
+
+          <div class="skill-category">
+            <h4>Soft skillek</h4>
+            <mat-chip-set>
+              <mat-chip *ngFor="let skill of profileData.skills.soft" [removable]="editMode" (removed)="removeSoftSkill(skill)">
+                {{skill}}
+                <mat-icon matChipRemove *ngIf="editMode">cancel</mat-icon>
+              </mat-chip>
+            </mat-chip-set>
+            <mat-form-field *ngIf="editMode" class="skill-input">
+              <mat-label>Soft skill hozzáadása</mat-label>
+              <input matInput #softSkillInput (keyup.enter)="addSoftSkill(softSkillInput.value); softSkillInput.value=''">
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Tanúsítványok -->
+    <mat-card class="profile-section">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>verified</mat-icon>
+        <mat-card-title>Tanúsítványok és minősítések</mat-card-title>
+        <div class="section-actions" *ngIf="editMode">
+          <button mat-icon-button (click)="addCertification()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngFor="let cert of profileData.certifications; let i = index" class="certification-item">
+          <div class="cert-main-info">
+            <h4 *ngIf="!editMode">{{cert.name}}</h4>
+            <mat-form-field *ngIf="editMode">
+              <mat-label>Tanúsítvány neve</mat-label>
+              <input matInput [(ngModel)]="cert.name">
+            </mat-form-field>
+
+            <p *ngIf="!editMode" class="issuer">{{cert.issuer}}</p>
+            <mat-form-field *ngIf="editMode">
+              <mat-label>Kiállító</mat-label>
+              <input matInput [(ngModel)]="cert.issuer">
+            </mat-form-field>
+
+            <div class="cert-details">
+              <span *ngIf="!editMode">{{cert.date | date:'yyyy. MM.'}}</span>
+              <mat-form-field *ngIf="editMode">
+                <mat-label>Dátum</mat-label>
+                <input matInput [(ngModel)]="cert.date" type="date">
+              </mat-form-field>
+
+              <span *ngIf="cert.expiryDate && !editMode"> - Lejárat: {{cert.expiryDate | date:'yyyy. MM.'}}</span>
+              <mat-form-field *ngIf="editMode">
+                <mat-label>Lejárati dátum</mat-label>
+                <input matInput [(ngModel)]="cert.expiryDate" type="date">
+              </mat-form-field>
+            </div>
+
+            <div *ngIf="cert.credentialUrl && !editMode" class="credential-link">
+              <a [href]="cert.credentialUrl" target="_blank" mat-stroked-button>
+                <mat-icon>launch</mat-icon>
+                Hitelesítő link
+              </a>
+            </div>
+            <mat-form-field *ngIf="editMode">
+              <mat-label>Hitelesítő URL</mat-label>
+              <input matInput [(ngModel)]="cert.credentialUrl" type="url">
+            </mat-form-field>
+          </div>
+
+          <button *ngIf="editMode" mat-icon-button color="warn" (click)="removeCertification(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Munkapreferenciák -->
+    <mat-card class="profile-section">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>work_outline</mat-icon>
+        <mat-card-title>Munkapreferenciák</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="preferences-grid">
+          <div class="preference-item">
+            <h4>Munkavégzés helye</h4>
+            <mat-chip-set *ngIf="!editMode">
+              <mat-chip *ngFor="let pref of profileData.workPreferences.workLocation">{{pref}}</mat-chip>
+            </mat-chip-set>
+            <div *ngIf="editMode">
+              <mat-checkbox [(ngModel)]="profileData.workPreferences.remote">Távmunka</mat-checkbox>
+              <mat-checkbox [(ngModel)]="profileData.workPreferences.hybrid">Hibrid</mat-checkbox>
+              <mat-checkbox [(ngModel)]="profileData.workPreferences.onSite">Irodában</mat-checkbox>
+            </div>
+          </div>
+
+          <div class="preference-item">
+            <h4>Munkaidő</h4>
+            <mat-chip-set *ngIf="!editMode">
+              <mat-chip *ngFor="let time of profileData.workPreferences.workTime">{{time}}</mat-chip>
+            </mat-chip-set>
+            <div *ngIf="editMode">
+              <mat-checkbox [(ngModel)]="profileData.workPreferences.fullTime">Teljes munkaidő</mat-checkbox>
+              <mat-checkbox [(ngModel)]="profileData.workPreferences.partTime">Részmunkaidő</mat-checkbox>
+              <mat-checkbox [(ngModel)]="profileData.workPreferences.freelance">Freelancer</mat-checkbox>
+              <mat-checkbox [(ngModel)]="profileData.workPreferences.contract">Szerződéses</mat-checkbox>
+            </div>
+          </div>
+
+          <div class="preference-item">
+            <h4>Bérigény</h4>
+            <div *ngIf="!editMode">
+              {{profileData.workPreferences.salaryMin | currency:'HUF':'symbol':'1.0-0'}} -
+              {{profileData.workPreferences.salaryMax | currency:'HUF':'symbol':'1.0-0'}} / hó
+            </div>
+            <div *ngIf="editMode" class="salary-range">
+              <mat-form-field>
+                <mat-label>Minimum</mat-label>
+                <input matInput [(ngModel)]="profileData.workPreferences.salaryMin" type="number">
+                <span matSuffix>Ft</span>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Maximum</mat-label>
+                <input matInput [(ngModel)]="profileData.workPreferences.salaryMax" type="number">
+                <span matSuffix>Ft</span>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="preference-item">
+            <h4>Mobilitás</h4>
+            <div *ngIf="!editMode">
+              <p>Költözési hajlandóság: {{profileData.workPreferences.willingToRelocate ? 'Igen' : 'Nem'}}</p>
+              <p *ngIf="profileData.workPreferences.travelWillingness">Utazási hajlandóság: {{profileData.workPreferences.travelWillingness}}%</p>
+            </div>
+            <div *ngIf="editMode">
+              <mat-checkbox [(ngModel)]="profileData.workPreferences.willingToRelocate">Hajlandó költözni</mat-checkbox>
+              <mat-form-field>
+                <mat-label>Utazási hajlandóság (%)</mat-label>
+                <input matInput [(ngModel)]="profileData.workPreferences.travelWillingness" type="number" min="0" max="100">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Hobbik és érdeklődési területek -->
+    <mat-card class="profile-section">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>sports_esports</mat-icon>
+        <mat-card-title>Hobbik és érdeklődési területek</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngIf="!editMode && profileData.hobbies?.length" class="hobbies-display">
+          <mat-chip-set>
+            <mat-chip *ngFor="let hobby of profileData.hobbies">{{hobby}}</mat-chip>
+          </mat-chip-set>
+        </div>
+        <div *ngIf="editMode" class="hobbies-edit">
+          <mat-chip-set>
+            <mat-chip *ngFor="let hobby of profileData.hobbies" removable (removed)="removeHobby(hobby)">
+              {{hobby}}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+          </mat-chip-set>
+          <mat-form-field class="hobby-input">
+            <mat-label>Hobby hozzáadása</mat-label>
+            <input matInput #hobbyInput (keyup.enter)="addHobby(hobbyInput.value); hobbyInput.value=''">
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Önkéntes munka -->
+    <mat-card class="profile-section">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>volunteer_activism</mat-icon>
+        <mat-card-title>Önkéntes munka</mat-card-title>
+        <div class="section-actions" *ngIf="editMode">
+          <button mat-icon-button (click)="addVolunteerWork()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngFor="let volunteer of profileData.volunteerWork; let i = index" class="volunteer-item">
+          <div class="volunteer-header">
+            <div class="volunteer-main-info">
+              <h4 *ngIf="!editMode">{{volunteer.role}}</h4>
+              <mat-form-field *ngIf="editMode">
+                <mat-label>Szerepkör</mat-label>
+                <input matInput [(ngModel)]="volunteer.role">
+              </mat-form-field>
+
+              <p *ngIf="!editMode" class="organization">{{volunteer.organization}}</p>
+              <mat-form-field *ngIf="editMode">
+                <mat-label>Szervezet</mat-label>
+                <input matInput [(ngModel)]="volunteer.organization">
+              </mat-form-field>
+
+              <div class="duration">
+                <mat-icon>schedule</mat-icon>
+                <span *ngIf="!editMode">{{volunteer.startDate | date:'yyyy. MM.'}} - {{volunteer.endDate ? (volunteer.endDate | date:'yyyy. MM.') : 'folyamatban'}}</span>
+                <div *ngIf="editMode" class="date-range">
+                  <mat-form-field>
+                    <mat-label>Kezdés</mat-label>
+                    <input matInput [(ngModel)]="volunteer.startDate" type="date">
+                  </mat-form-field>
+                  <mat-form-field>
+                    <mat-label>Befejezés</mat-label>
+                    <input matInput [(ngModel)]="volunteer.endDate" type="date">
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+
+            <button *ngIf="editMode" mat-icon-button color="warn" (click)="removeVolunteerWork(i)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+
+          <div *ngIf="!editMode && volunteer.description" class="description">
+            <p>{{volunteer.description}}</p>
+          </div>
+          <mat-form-field *ngIf="editMode" class="full-width">
+            <mat-label>Tevékenység leírása</mat-label>
+            <textarea matInput [(ngModel)]="volunteer.description" rows="3"></textarea>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Referenciák -->
+    <mat-card class="profile-section">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>people</mat-icon>
+        <mat-card-title>Referenciák</mat-card-title>
+        <div class="section-actions" *ngIf="editMode">
+          <button mat-icon-button (click)="addReference()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngFor="let ref of profileData.references; let i = index" class="reference-item">
+          <div class="reference-header">
+            <div class="reference-main-info">
+              <h4 *ngIf="!editMode">{{ref.name}}</h4>
+              <mat-form-field *ngIf="editMode">
+                <mat-label>Név</mat-label>
+                <input matInput [(ngModel)]="ref.name">
+              </mat-form-field>
+
+              <p *ngIf="!editMode" class="position">{{ref.position}} - {{ref.company}}</p>
+              <div *ngIf="editMode" class="inline-inputs">
+                <mat-form-field>
+                  <mat-label>Beosztás</mat-label>
+                  <input matInput [(ngModel)]="ref.position">
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Cég</mat-label>
+                  <input matInput [(ngModel)]="ref.company">
+                </mat-form-field>
+              </div>
+
+              <div class="contact-info" *ngIf="!editMode">
+                <div *ngIf="ref.email">
+                  <mat-icon>email</mat-icon>
+                  <span>{{ref.email}}</span>
+                </div>
+                <div *ngIf="ref.phone">
+                  <mat-icon>phone</mat-icon>
+                  <span>{{ref.phone}}</span>
+                </div>
+              </div>
+
+              <div *ngIf="editMode" class="inline-inputs">
+                <mat-form-field>
+                  <mat-label>Email</mat-label>
+                  <input matInput [(ngModel)]="ref.email" type="email">
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Telefon</mat-label>
+                  <input matInput [(ngModel)]="ref.phone" type="tel">
+                </mat-form-field>
+              </div>
+            </div>
+
+            <button *ngIf="editMode" mat-icon-button color="warn" (click)="removeReference(i)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+
+          <div *ngIf="!editMode && ref.relationship" class="relationship">
+            <p><strong>Kapcsolat:</strong> {{ref.relationship}}</p>
+          </div>
+          <mat-form-field *ngIf="editMode" class="full-width">
+            <mat-label>Kapcsolat típusa</mat-label>
+            <input matInput [(ngModel)]="ref.relationship" placeholder="pl. közvetlen főnök, kolléga, ügyfél">
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Kontakt adatok és linkek -->
+    <mat-card class="profile-section">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>link</mat-icon>
+        <mat-card-title>Online jelenlét</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="social-links">
+          <div class="link-item">
+            <mat-icon>code</mat-icon>
+            <div class="link-content">
+              <label>GitHub</label>
+              <div *ngIf="!editMode">
+                <a *ngIf="profileData.socialLinks.github" [href]="profileData.socialLinks.github" target="_blank">
+                  {{profileData.socialLinks.github}}
+                </a>
+                <span *ngIf="!profileData.socialLinks.github" class="no-data">Nincs megadva</span>
+              </div>
+              <mat-form-field *ngIf="editMode" class="full-width">
+                <input matInput [(ngModel)]="profileData.socialLinks.github" type="url" placeholder="https://github.com/username">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="link-item">
+            <mat-icon>business</mat-icon>
+            <div class="link-content">
+              <label>LinkedIn</label>
+              <div *ngIf="!editMode">
+                <a *ngIf="profileData.socialLinks.linkedin" [href]="profileData.socialLinks.linkedin" target="_blank">
+                  {{profileData.socialLinks.linkedin}}
+                </a>
+                <span *ngIf="!profileData.socialLinks.linkedin" class="no-data">Nincs megadva</span>
+              </div>
+              <mat-form-field *ngIf="editMode" class="full-width">
+                <input matInput [(ngModel)]="profileData.socialLinks.linkedin" type="url" placeholder="https://linkedin.com/in/username">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="link-item">
+            <mat-icon>web</mat-icon>
+            <div class="link-content">
+              <label>Portfólió oldal</label>
+              <div *ngIf="!editMode">
+                <a *ngIf="profileData.socialLinks.portfolio" [href]="profileData.socialLinks.portfolio" target="_blank">
+                  {{profileData.socialLinks.portfolio}}
+                </a>
+                <span *ngIf="!profileData.socialLinks.portfolio" class="no-data">Nincs megadva</span>
+              </div>
+              <mat-form-field *ngIf="editMode" class="full-width">
+                <input matInput [(ngModel)]="profileData.socialLinks.portfolio" type="url" placeholder="https://yourportfolio.com">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="link-item">
+            <mat-icon>article</mat-icon>
+            <div class="link-content">
+              <label>Blog/Website</label>
+              <div *ngIf="!editMode">
+                <a *ngIf="profileData.socialLinks.website" [href]="profileData.socialLinks.website" target="_blank">
+                  {{profileData.socialLinks.website}}
+                </a>
+                <span *ngIf="!profileData.socialLinks.website" class="no-data">Nincs megadva</span>
+              </div>
+              <mat-form-field *ngIf="editMode" class="full-width">
+                <input matInput [(ngModel)]="profileData.socialLinks.website" type="url" placeholder="https://yourblog.com">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

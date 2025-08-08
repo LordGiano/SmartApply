@@ -1,13 +1,14 @@
 import { Routes } from '@angular/router';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { PlaceholderComponent } from './components/placeholder/placeholder.component';
+import {ProfileComponent} from './pages/profile/profile.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent },
 
   // Placeholder használata a még nem kész oldalakhoz
-  { path: 'profile', component: PlaceholderComponent },
+  { path: 'profile', component: ProfileComponent },
   { path: 'documents/resume-editor', component: PlaceholderComponent },
   { path: 'documents/cover-letters', component: PlaceholderComponent },
   { path: 'documents/attachments', component: PlaceholderComponent },
